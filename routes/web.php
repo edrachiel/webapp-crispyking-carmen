@@ -20,33 +20,33 @@ use App\Models\Slider;
 
 
 Route::get('/', function () {
-    $sliders = Slider::all();
-    return view('homepage',['sliders' => $sliders]);
+        $sliders = Slider::all();
+        return view('homepage', ['sliders' => $sliders]);
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+        return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/users', [UserController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('users');
+        ->middleware(['auth', 'verified'])
+        ->name('users');
 
 Route::get('/announcement', [UserController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('announcement');
+        ->middleware(['auth', 'verified'])
+        ->name('announcement');
 
-    
+
 Route::get('/users/add', [UserController::class, 'form'])
-    ->middleware(['auth', 'verified']);
+        ->middleware(['auth', 'verified']);
 Route::post('/users/add', [UserController::class, 'store'])
-    ->middleware(['auth', 'verified']);
+        ->middleware(['auth', 'verified']);
 
 Route::get('/users/form_password/{id}', [UserController::class, 'passwordForm'])
-    ->middleware(['auth', 'verified']);
+        ->middleware(['auth', 'verified']);
 
 Route::post('/users/change-password/{id}', [UserController::class, 'changePassword'])
-    ->middleware(['auth', 'verified']);
+        ->middleware(['auth', 'verified']);
 
 Route::get('/users/update/{id}', [UserController::class, 'show'])
         ->middleware(['auth', 'verified']);
@@ -60,14 +60,16 @@ Route::post('/users/update-password/{id}', [UserController::class, 'updatePasswo
 
 Route::delete('/users/delete-user/{id}', [UserController::class, 'destroy'])
         ->middleware(['auth', 'verified']);
-        
+
+Route::get('/users/search', 'App\Http\Controllers\UserController@search');
+
 
 Route::get('/sliders', [SliderController::class, 'index'])
         ->middleware(['auth', 'verified'])
         ->name('sliders');
 Route::get('/sliders/create', [SliderController::class, 'create'])
         ->middleware(['auth', 'verified'])
-        ->name('create');    
+        ->name('create');
 Route::post('/sliders/create', [SliderController::class, 'store'])
         ->middleware(['auth', 'verified'])
         ->name('create');
@@ -80,12 +82,12 @@ Route::put('/sliders/{slider}', [SliderController::class, 'update'])
 Route::get('/sliders/{slider}/delete', [SliderController::class, 'destroy'])
         ->middleware(['auth', 'verified'])
         ->name('destroy');
-    
+
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         return view('users.users', [
             'header' => 'Users Management',
-            'users' =>  User::all()
+            'users' => User::all()
         ]);
     }
 
@@ -32,13 +32,13 @@ class UserController extends Controller
         $user = User::find($id);
         return view('users.form_password', [
             'header' => 'Change Password',
-            'user'      => $user
+            'user' => $user
         ]);
     }
 
     public function changePassword(Request $request, $id)
     {
-        
+
         DB::table('users')->where('id', $request->id)->update([
             'password' => Hash::make($request->password)
         ]);
@@ -55,7 +55,7 @@ class UserController extends Controller
         //FOR VALIDATION
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
@@ -71,18 +71,18 @@ class UserController extends Controller
         return redirect('/users');
     }
 
-   
-     public function show($id)
-     {
-         $user = User::find($id);
- 
-         return view('users.form', [
-                 'header'    => 'Update User',
-                 'user'      => $user
-             ]); 
-     }
 
-    
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        return view('users.form', [
+            'header' => 'Update User',
+            'user' => $user
+        ]);
+    }
+
+
     public function update(Request $request, $id)
     {
         // For Validation
@@ -100,13 +100,24 @@ class UserController extends Controller
         return redirect('/users');
     }
 
-    public function destroy(Request $request, $id){
-        
+    public function destroy(Request $request, $id)
+    {
+
         $user = User::find($id);
         $user->delete($request->all());
         session()->flash('status', 'Data Successfully Deleted!');
         return redirect('/users');
     }
 
-    
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        // Perform the search logic, for example using the "where" method
+        $users = User::where('name', 'like', "%$search%")->get();
+
+        return view('users.users', ['users' => $users]);
+    }
+
+
 }
